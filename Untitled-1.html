@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-950 text-slate-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multicloud SalesOps Agentic Architecture Visualizer</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind Config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              900: '#312e81',
+            },
+            hubspot: '#ff7a59',
+            google: '#4285f4',
+            microsoft: '#00a4ef',
+            firebase: '#ffca28',
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* Dash animations for SVG paths */
+    @keyframes dash {
+      to {
+        stroke-dashoffset: -40;
+      }
+    }
+    .glowing-path {
+      stroke-dasharray: 6, 4;
+      animation: dash 1.5s linear infinite;
+    }
+    .pulse-node {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; filter: drop-shadow(0 0 2px rgba(99, 102, 241, 0.2)); }
+      50% { opacity: .8; filter: drop-shadow(0 0 12px rgba(99, 102, 241, 0.6)); }
+    }
+    /* Scrollbar customization */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090d16;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+  </style>
+</head>
+<body class="h-full flex flex-col font-sans antialiased overflow-hidden selection:bg-brand-500/30 selection:text-brand-100">
+
+  <!-- Application Header -->
+  <header class="flex-none bg-slate-900 border-b border-slate-800/80 px-6 py-4 flex items-center justify-between z-10">
+    <div class="flex items-center space-x-3">
+      <div class="bg-gradient-to-tr from-brand-600 to-indigo-500 p-2.5 rounded-xl shadow-lg shadow-indigo-500/10">
+        <i data-lucide="shuffle" class="w-6 h-6 text-white"></i>
+      </div>
+      <div>
+        <h1 class="text-base font-bold text-white tracking-tight flex items-center gap-2">
+          Multicloud Agentic Integration Architecture
+          <span class="text-[10px] font-semibold bg-emerald-500/15 text-emerald-400 px-2.5 py-0.5 rounded-full border border-emerald-500/30">Enterprise-Ready Blueprint</span>
+        </h1>
+        <p class="text-xs text-slate-400">GCP Core Intelligence Engine interfacing with Google Workspace & Microsoft 365 environments</p>
+      </div>
+    </div>
+    
+    <!-- System Level Mode Toggle -->
+    <div class="flex items-center space-x-4">
+      <div class="flex bg-slate-950 border border-slate-800 p-1 rounded-xl">
+        <button onclick="toggleGlobalStack('google')" id="global-toggle-google" class="px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center space-x-2 bg-brand-500 text-white shadow-md shadow-brand-500/10">
+          <i data-lucide="chrome" class="w-3.5 h-3.5"></i>
+          <span>Google Workspace</span>
+        </button>
+        <button onclick="toggleGlobalStack('microsoft')" id="global-toggle-microsoft" class="px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center space-x-2 text-slate-400 hover:text-slate-200">
+          <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
+          <span>Microsoft 365</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Split Layout -->
+  <div class="flex-1 flex overflow-hidden">
+    
+    <!-- Left Navigation Sidebar -->
+    <nav class="w-64 bg-slate-900/50 border-r border-slate-800 p-4 flex flex-col justify-between overflow-y-auto flex-none">
+      <div class="space-y-6">
+        <div>
+          <span class="text-[10px] font-bold tracking-wider text-slate-500 uppercase px-3 block mb-2">Interactive Views</span>
+          <div class="space-y-1">
+            <button onclick="switchTab('topology')" id="nav-topology" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition bg-slate-800 text-brand-400 shadow-inner">
+              <i data-lucide="git-branch" class="w-4 h-4"></i>
+              <span>Multicloud Topology</span>
+            </button>
+            <button onclick="switchTab('abstraction')" id="nav-abstraction" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:text-slate-100 hover:bg-slate-800/50">
+              <i data-lucide="layers" class="w-4 h-4"></i>
+              <span>The Abstraction Layer</span>
+            </button>
+            <button onclick="switchTab('simulator')" id="nav-simulator" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:text-slate-100 hover:bg-slate-800/50">
+              <i data-lucide="play-circle" class="w-4 h-4"></i>
+              <span>Execution Simulator</span>
+            </button>
+            <button onclick="switchTab('security')" id="nav-security" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:text-slate-100 hover:bg-slate-800/50">
+              <i data-lucide="key" class="w-4 h-4"></i>
+              <span>Federated Security Spec</span>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <span class="text-[10px] font-bold tracking-wider text-slate-500 uppercase px-3 block mb-2">Architectural Meta</span>
+          <div class="space-y-3 px-3">
+            <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800/80 space-y-1">
+              <span class="text-[9px] font-bold text-slate-500 block uppercase">Orchestration Framework</span>
+              <p class="text-xs font-semibold text-slate-300">LangGraph (Python State-Graph)</p>
+            </div>
+            <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800/80 space-y-1">
+              <span class="text-[9px] font-bold text-slate-500 block uppercase">Persistence Layer</span>
+              <p class="text-xs font-semibold text-slate-300">Cloud Firestore (Firebase)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Info -->
+      <div class="pt-4 border-t border-slate-800/60">
+        <div class="bg-indigo-950/20 rounded-xl p-3 border border-indigo-500/10 text-center">
+          <p class="text-[10px] text-indigo-400 uppercase font-semibold">Security Level</p>
+          <p class="text-xs font-bold text-slate-200 mt-1">Enterprise Grade (Federated)</p>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Dynamic Content Pane -->
+    <main class="flex-1 overflow-y-auto p-6 bg-slate-950 relative">
+
+      <!-- ================== VIEW 1: TOPOOLOGY MAP ================== -->
+      <section id="tab-topology" class="tab-pane space-y-6">
+        <div class="flex flex-col xl:flex-row gap-6">
+          <!-- Topology SVG Container -->
+          <div class="flex-1 bg-slate-900/40 rounded-2xl border border-slate-800/80 p-6 flex flex-col justify-between relative overflow-hidden backdrop-blur-sm min-h-[500px]">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center space-x-2">
+                  <i data-lucide="network" class="w-5 h-5 text-indigo-400"></i>
+                  <h3 class="text-sm font-semibold text-white">Cross-Cloud Network & API Interface Mapping</h3>
+                </div>
+                <span class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Interactive Flow Blueprint</span>
+              </div>
+              <p class="text-xs text-slate-400 max-w-2xl">This topology details the data flows originating from the Central GCP Service. Toggling the active integration suite on the top right dynamically routes traffic between platforms.</p>
+            </div>
+
+            <!-- SVG Diagram -->
+            <div class="relative w-full flex justify-center items-center py-6 flex-1">
+              <svg width="100%" height="340" viewBox="0 0 800 340" class="max-w-[760px] w-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Defs for linear gradients -->
+                <defs>
+                  <linearGradient id="grad-google" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#4285f4" stop-opacity="0.8"/>
+                    <stop offset="100%" stop-color="#34a853" stop-opacity="0.8"/>
+                  </linearGradient>
+                  <linearGradient id="grad-microsoft" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#00a4ef" stop-opacity="0.8"/>
+                    <stop offset="100%" stop-color="#7fba00" stop-opacity="0.8"/>
+                  </linearGradient>
+                </defs>
+
+                <!-- Core Connections -->
+                <!-- HubSpot to GCP Core -->
+                <path d="M 120,170 Q 240,170 240,170" stroke="#ff7a59" stroke-width="2" class="glowing-path" />
+                
+                <!-- Firestore to GCP Core -->
+                <path d="M 320,85 L 320,125" stroke="#ffca28" stroke-width="1.5" class="glowing-path opacity-60" />
+
+                <!-- GOOGLE CONNECTIONS (Left/Top branch) -->
+                <!-- GCP to Google Workspace Path -->
+                <path id="path-google" d="M 400,150 Q 500,90 600,90" stroke="#4285f4" stroke-width="2" class="glowing-path transition-all duration-300" />
+                
+                <!-- MICROSOFT CONNECTIONS (Right/Bottom branch) -->
+                <!-- GCP to Microsoft 365 Path -->
+                <path id="path-microsoft" d="M 400,190 Q 500,250 600,250" stroke="#475569" stroke-width="1" stroke-dasharray="4,4" class="transition-all duration-300" />
+
+                <!-- Nodes -->
+                <!-- HubSpot Node -->
+                <g class="cursor-pointer group" onclick="inspectTopoNode('hubspot')">
+                  <rect x="20" y="125" width="120" height="90" rx="12" fill="#2c140e" stroke="#ff7a59" stroke-width="1.5" class="group-hover:fill-orange-950/40 transition" />
+                  <circle cx="80" cy="155" r="14" fill="none" stroke="#ff7a59" stroke-width="2" />
+                  <circle cx="80" cy="155" r="5" fill="#ff7a59" />
+                  <line x1="80" y1="155" x2="95" y2="145" stroke="#ff7a59" stroke-width="2" />
+                  <text x="80" y="195" fill="#ffd8ce" font-size="10" font-weight="bold" text-anchor="middle">HubSpot CRM</text>
+                  <text x="80" y="206" fill="#ff7a59" font-size="8" text-anchor="middle">State Trigger / UI</text>
+                </g>
+
+                <!-- Cloud Firestore Node (Top Center) -->
+                <g class="cursor-pointer group" onclick="inspectTopoNode('firestore')">
+                  <rect x="250" y="20" width="140" height="65" rx="10" fill="#2c2200" stroke="#ffca28" stroke-width="1.5" class="group-hover:fill-yellow-950/40 transition" />
+                  <text x="320" y="45" fill="#ffea9f" font-size="11" font-weight="bold" text-anchor="middle">Cloud Firestore</text>
+                  <text x="320" y="58" fill="#eab308" font-size="8" text-anchor="middle">Isolated Data State</text>
+                  <circle cx="320" cy="73" r="4" fill="#ffca28" />
+                </g>
+
+                <!-- GCP Central Brain Core Node -->
+                <g class="cursor-pointer group" onclick="inspectTopoNode('gcp-core')">
+                  <rect x="240" y="125" width="160" height="90" rx="16" fill="#1e1b4b" stroke="#6366f1" stroke-width="2.5" class="group-hover:fill-indigo-950/40 transition pulse-node" />
+                  <text x="320" y="155" fill="#e2e8f0" font-size="12" font-weight="bold" text-anchor="middle">GCP Cloud Run</text>
+                  <text x="320" y="168" fill="#818cf8" font-size="9" text-anchor="middle">FastAPI / LangGraph</text>
+                  <text x="320" y="188" fill="#cbd5e1" font-size="8" text-anchor="middle">"The Swappable Brain"</text>
+                </g>
+
+                <!-- Google Workspace Destination (Top Right Branch) -->
+                <g id="node-google" class="cursor-pointer group" onclick="inspectTopoNode('google')">
+                  <rect x="600" y="45" width="160" height="90" rx="12" fill="#082040" stroke="#4285f4" stroke-width="2" class="group-hover:fill-blue-950/40 transition" />
+                  <text x="680" y="75" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle">Google Workspace</text>
+                  <text x="680" y="88" fill="#93c5fd" font-size="8" text-anchor="middle">Drive, Docs, Slides REST API</text>
+                  <rect x="630" y="105" width="100" height="18" rx="4" fill="#1d4ed8" />
+                  <text x="680" y="117" fill="#fff" font-size="8" font-weight="bold" text-anchor="middle">Google SDK Adapter</text>
+                </g>
+
+                <!-- Microsoft 365 Destination (Bottom Right Branch) -->
+                <g id="node-microsoft" class="cursor-pointer group opacity-40" onclick="inspectTopoNode('microsoft')">
+                  <rect x="600" y="205" width="160" height="90" rx="12" fill="#0f172a" stroke="#475569" stroke-width="1.5" class="group-hover:fill-slate-900/40 transition" />
+                  <text x="680" y="235" fill="#94a3b8" font-size="12" font-weight="bold" text-anchor="middle">Microsoft 365</text>
+                  <text x="680" y="248" fill="#64748b" font-size="8" text-anchor="middle">SharePoint, Teams, Graph API</text>
+                  <rect x="630" y="265" width="100" height="18" rx="4" fill="#334155" />
+                  <text x="680" y="277" fill="#94a3b8" font-size="8" font-weight="bold" text-anchor="middle">MS Graph Adapter</text>
+                </g>
+              </svg>
+            </div>
+
+            <!-- Footer Legend representing swappable logic -->
+            <div class="flex items-center justify-center space-x-6 text-xs border-t border-slate-800/60 pt-4">
+              <span class="flex items-center space-x-1.5"><span class="w-3 h-0.5 bg-hubspot inline-block"></span><span class="text-slate-400">Trigger Pipeline</span></span>
+              <span class="flex items-center space-x-1.5"><span class="w-3 h-0.5 bg-brand-500 inline-block"></span><span class="text-slate-400">GCP Orchestrator</span></span>
+              <span class="flex items-center space-x-1.5"><span id="legend-glow-dot" class="w-2 h-2 rounded-full bg-google inline-block animate-ping"></span><span id="legend-glow-text" class="text-slate-200 font-bold">Google Path Active</span></span>
+            </div>
+          </div>
+
+          <!-- Metadata Node Inspector Sidebar -->
+          <div class="w-full xl:w-80 bg-slate-900/60 rounded-2xl border border-slate-800/80 p-5 flex flex-col justify-between backdrop-blur-sm">
+            <div id="topo-inspector-default">
+              <h4 class="text-sm font-bold text-white mb-3">Network Node Inspector</h4>
+              <p class="text-xs text-slate-400 leading-relaxed mb-4">Click any infrastructure component in the network topology map to inspect internal security models, active API clients, and routing policies.</p>
+              <div class="border border-indigo-500/10 rounded-xl p-4 bg-indigo-500/5 space-y-3">
+                <div class="flex items-center space-x-2 text-xs text-brand-400">
+                  <i data-lucide="info" class="w-4 h-4"></i>
+                  <span class="font-semibold">Architect Insight</span>
+                </div>
+                <p class="text-[11px] text-slate-300 leading-relaxed">
+                  The GCP container hosts both API adapters. Swapping integrations doesn't require cloud migration, just changing an environmental pointer.
+                </p>
+              </div>
+            </div>
+
+            <!-- Hydrated Node Inspector details -->
+            <div id="topo-inspector-details" class="hidden space-y-4">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <span class="text-xs uppercase tracking-wider font-bold text-slate-500" id="topo-cat">Platform Class</span>
+                <span class="text-[10px] bg-brand-500/10 text-brand-400 border border-brand-500/20 px-2 py-0.5 rounded-full" id="topo-state">System Core</span>
+              </div>
+              <h4 class="text-base font-bold text-white flex items-center gap-2" id="topo-title">Cloud Run</h4>
+              <p class="text-xs text-slate-300 leading-relaxed" id="topo-desc">Processes the logical sequence loops and orchestrates sub-agents.</p>
+              
+              <div class="space-y-3 pt-2">
+                <div class="bg-slate-950/60 border border-slate-800 rounded-xl p-3">
+                  <span class="text-[10px] font-bold text-slate-400 block mb-1">Target Endpoint / Driver</span>
+                  <p class="text-xs font-mono text-brand-300" id="topo-endpoint">gcp://cloud-run/fastapi</p>
+                </div>
+                <div class="bg-slate-950/60 border border-slate-800 rounded-xl p-3">
+                  <span class="text-[10px] font-bold text-slate-400 block mb-1">Identity Access Scope</span>
+                  <p class="text-xs text-slate-300" id="topo-security">Service Account Impersonation</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Confidence progress meter -->
+            <div class="mt-6 border-t border-slate-800/60 pt-4">
+              <div class="flex items-center justify-between text-[11px] text-slate-400">
+                <span>Deployment Strategy</span>
+                <span class="font-mono text-indigo-400 font-semibold">Multicloud Certified</span>
+              </div>
+              <div class="w-full bg-slate-950 rounded-full h-1.5 mt-2 overflow-hidden">
+                <div class="bg-gradient-to-r from-brand-600 to-emerald-400 h-1.5 rounded-full" style="width: 100%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================== VIEW 2: THE ABSTRACTION LAYER ================== -->
+      <section id="tab-abstraction" class="tab-pane hidden space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          
+          <!-- Interface Visualizer Flow -->
+          <div class="bg-slate-900/40 rounded-2xl border border-slate-800/80 p-6 space-y-4 backdrop-blur-sm">
+            <div class="flex items-center space-x-2">
+              <i data-lucide="layers" class="w-5 h-5 text-indigo-400"></i>
+              <h3 class="text-sm font-semibold text-white">The Swappable Provider Interface Pattern</h3>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              To support both platforms simultaneously, we decouple the agentic core from the document storage provider. The core engine only communicates with a unified abstract interface: `IDocumentProvider`.
+            </p>
+
+            <!-- Visual Component Hierarchy Block -->
+            <div class="space-y-4 pt-4 relative">
+              <div class="text-center p-3 bg-indigo-500/10 border border-indigo-500/30 rounded-xl relative z-10">
+                <span class="text-[10px] uppercase font-bold text-indigo-400 tracking-wider">Agent Reasoner (Brain)</span>
+                <p class="text-xs font-bold text-white mt-1">LangGraph / Gemini Loop</p>
+              </div>
+
+              <!-- Flow downward arrow -->
+              <div class="flex justify-center">
+                <i data-lucide="arrow-down" class="w-5 h-5 text-slate-600"></i>
+              </div>
+
+              <div class="text-center p-3 bg-slate-950 border border-slate-800 rounded-xl relative z-10 shadow-lg">
+                <span class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Abstract Interface Boundary</span>
+                <p class="text-xs font-bold text-brand-300 mt-1">IDocumentProvider (Interface)</p>
+              </div>
+
+              <!-- Splitting Arrows -->
+              <div class="flex justify-between px-16">
+                <i data-lucide="arrow-down-left" class="w-5 h-5 text-slate-600"></i>
+                <i data-lucide="arrow-down-right" class="w-5 h-5 text-slate-600"></i>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div class="p-3 bg-blue-950/20 border border-blue-500/30 rounded-xl text-center">
+                  <span class="text-[10px] uppercase font-bold text-blue-400">Google Workspace Adapter</span>
+                  <p class="text-[11px] text-slate-300 mt-1">Writes to Google Docs & Drive via REST clients</p>
+                </div>
+                <div class="p-3 bg-cyan-950/20 border border-cyan-500/30 rounded-xl text-center">
+                  <span class="text-[10px] uppercase font-bold text-cyan-400">SharePoint Adapter</span>
+                  <p class="text-[11px] text-slate-300 mt-1">Writes to Microsoft Office 365 via MS Graph API</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Code Panel Representation -->
+          <div class="bg-slate-900/40 rounded-2xl border border-slate-800/80 p-6 space-y-4 backdrop-blur-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
+                <div class="flex items-center space-x-2">
+                  <i data-lucide="code" class="w-5 h-5 text-brand-400"></i>
+                  <h3 class="text-sm font-semibold text-white">Unified Python Adapter Architecture</h3>
+                </div>
+                <span class="text-[10px] bg-slate-950 text-slate-500 border border-slate-800 px-2 py-0.5 rounded font-mono">providers.py</span>
+              </div>
+              <p class="text-xs text-slate-400 leading-relaxed mb-4">This python snippet represents the codebase architecture we implement within Cloud Run to guarantee hot-swappable providers.</p>
+            </div>
+
+            <!-- Preformatted Code Block -->
+            <div class="bg-slate-950 rounded-xl border border-slate-800 p-4 font-mono text-[10.5px] text-slate-300 overflow-x-auto">
+<pre class="leading-relaxed"><span class="text-indigo-400">from</span> abc <span class="text-indigo-400">import</span> ABC, abstractmethod
+
+<span class="text-slate-500"># 1. ABSTRACT PROVIDER INTERFACE</span>
+<span class="text-indigo-400">class</span> <span class="text-emerald-400">IDocumentProvider</span>(ABC):
+    <span class="text-indigo-400">@abstractmethod</span>
+    <span class="text-indigo-400">def</span> <span class="text-amber-300">create_proposal</span>(self, deal_id: str, context: dict) -> str:
+        <span class="text-indigo-400">pass</span>
+
+<span class="text-slate-500"># 2. MICROSOFT SHAREPOINT/GRAPH ADAPTER</span>
+<span class="text-indigo-400">class</span> <span class="text-emerald-400">SharePointProvider</span>(IDocumentProvider):
+    <span class="text-indigo-400">def</span> <span class="text-amber-300">create_proposal</span>(self, deal_id, context):
+        <span class="text-slate-500"># MS Graph call to saturate Word/SOW templates</span>
+        <span class="text-indigo-400">return</span> <span class="text-emerald-400">"https://sharepoint.com/sales/Acme_SOW.docx"</span>
+
+<span class="text-slate-500"># 3. GOOGLE WORKSPACE ADAPTER</span>
+<span class="text-indigo-400">class</span> <span class="text-emerald-400">GoogleDriveProvider</span>(IDocumentProvider):
+    <span class="text-indigo-400">def</span> <span class="text-amber-300">create_proposal</span>(self, deal_id, context):
+        <span class="text-slate-500"># Google Docs SDK batch replace templates</span>
+        <span class="text-indigo-400">return</span> <span class="text-emerald-400">"https://docs.google.com/document/d/Acme_SOW"</span></pre>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================== VIEW 3: SIMULATOR ================== -->
+      <section id="tab-simulator" class="tab-pane hidden space-y-6">
+        <div class="flex flex-col lg:flex-row gap-6">
+          
+          <!-- Simulator Command Panel -->
+          <div class="w-full lg:w-80 bg-slate-900/60 rounded-2xl border border-slate-800/80 p-5 flex flex-col justify-between backdrop-blur-sm flex-none">
+            <div class="space-y-6">
+              <div>
+                <h3 class="text-sm font-bold text-white mb-2">Simulated Trigger Console</h3>
+                <p class="text-xs text-slate-400">Initiate an agentic sales trigger and watch the system resolve execution across platforms dynamically.</p>
+              </div>
+
+              <!-- Input Triggers -->
+              <div class="space-y-3">
+                <button onclick="triggerSimulation('post-meeting')" class="w-full bg-slate-950 hover:bg-slate-800/50 text-left p-3 rounded-xl border border-slate-800 transition flex items-start space-x-3">
+                  <div class="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg mt-0.5">
+                    <i data-lucide="mic" class="w-4 h-4"></i>
+                  </div>
+                  <div>
+                    <h4 class="text-xs font-bold text-slate-200">Post-Call Synthesis</h4>
+                    <p class="text-[10px] text-slate-500">Process Triple Session audio transcript</p>
+                  </div>
+                </button>
+
+                <button onclick="triggerSimulation('build-proposal')" class="w-full bg-slate-950 hover:bg-slate-800/50 text-left p-3 rounded-xl border border-slate-800 transition flex items-start space-x-3">
+                  <div class="p-2 bg-brand-500/10 text-brand-400 rounded-lg mt-0.5">
+                    <i data-lucide="file-text" class="w-4 h-4"></i>
+                  </div>
+                  <div>
+                    <h4 class="text-xs font-bold text-slate-200">SOW Generation</h4>
+                    <p class="text-[10px] text-slate-500">Draft custom contract from template</p>
+                  </div>
+                </button>
+              </div>
+
+              <!-- Current Config Indicator -->
+              <div class="p-4 bg-slate-950 rounded-xl border border-slate-800 space-y-2">
+                <span class="text-[9px] uppercase font-bold text-slate-500">Active Integrations Driver</span>
+                <div class="flex items-center space-x-2">
+                  <span id="driver-badge-color" class="w-2.5 h-2.5 rounded-full bg-google"></span>
+                  <span id="driver-badge-text" class="text-xs font-bold text-slate-300">Google SDK Driver</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-800/60 flex items-center justify-between">
+              <span class="text-xs text-slate-400">Status:</span>
+              <span class="text-xs font-bold text-emerald-400 flex items-center gap-1">Idle & Ready <i data-lucide="check" class="w-3.5 h-3.5"></i></span>
+            </div>
+          </div>
+
+          <!-- Simulator Dynamic Log Viewer -->
+          <div class="flex-1 bg-slate-900/40 rounded-2xl border border-slate-800/80 p-6 flex flex-col justify-between backdrop-blur-sm min-h-[420px]">
+            <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
+              <div class="flex items-center space-x-2">
+                <i data-lucide="terminal" class="w-5 h-5 text-brand-400"></i>
+                <h3 class="text-sm font-semibold text-white">Real-Time Cloud Trace Output</h3>
+              </div>
+              <span class="text-xs font-mono text-slate-500" id="sim-timestamp">UTC - Live</span>
+            </div>
+
+            <!-- Dynamic Stream Logs Area -->
+            <div class="flex-1 bg-slate-950 rounded-xl border border-slate-800 p-4 font-mono text-[11px] text-slate-300 overflow-y-auto space-y-2 h-72" id="live-console-stream">
+              <p class="text-slate-500">// System initialized. Select a workflow trigger on the left to simulate execution.</p>
+              <p class="text-slate-500">// Current global provider environment set to: Google Drive Adapter.</p>
+            </div>
+
+            <!-- Progress Meter Bar -->
+            <div class="mt-4 flex items-center justify-between text-xs text-slate-400 border-t border-slate-800/60 pt-3">
+              <span>Execution State</span>
+              <span id="execution-percentage" class="font-mono text-brand-400">0%</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================== VIEW 4: SECURITY & FEDERATED IDENTITY ================== -->
+      <section id="tab-security" class="tab-pane hidden space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          
+          <!-- Identity Federation Explainer -->
+          <div class="bg-slate-900/40 rounded-2xl border border-slate-800/80 p-6 space-y-4 backdrop-blur-sm">
+            <div class="flex items-center space-x-2">
+              <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i>
+              <h3 class="text-sm font-semibold text-white">Workload Identity Federation Architecture</h3>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              When communicating between GCP (Cloud Run) and Azure/Microsoft 365, we **strictly reject** storing hardcoded passwords or API keys inside code or variables. Instead, we implement federated validation.
+            </p>
+
+            <!-- Federation Workflow Steps -->
+            <div class="space-y-3 pt-2">
+              <div class="bg-slate-950/60 border border-slate-800 p-3.5 rounded-xl flex items-start space-x-3">
+                <span class="bg-emerald-500/10 text-emerald-400 p-1.5 rounded-lg text-xs font-bold">1</span>
+                <div>
+                  <h4 class="text-xs font-bold text-white">Short-Lived GCP Token</h4>
+                  <p class="text-[11px] text-slate-400">Cloud Run generates a cryptographically signed identity token from Google Cloud's metadata server.</p>
+                </div>
+              </div>
+
+              <div class="bg-slate-950/60 border border-slate-800 p-3.5 rounded-xl flex items-start space-x-3">
+                <span class="bg-indigo-500/10 text-indigo-400 p-1.5 rounded-lg text-xs font-bold">2</span>
+                <div>
+                  <h4 class="text-xs font-bold text-white">Azure Entra Validation</h4>
+                  <p class="text-[11px] text-slate-400">The token is presented to Microsoft Entra ID. Entra matches the signature trust registry with Google's public endpoints.</p>
+                </div>
+              </div>
+
+              <div class="bg-slate-950/60 border border-slate-800 p-3.5 rounded-xl flex items-start space-x-3">
+                <span class="bg-brand-500/10 text-brand-400 p-1.5 rounded-lg text-xs font-bold">3</span>
+                <div>
+                  <h4 class="text-xs font-bold text-white">Access Exchange</h4>
+                  <p class="text-[11px] text-slate-400">Entra returns a safe, scoped OAuth access token back to GCP, enabling the agent to execute SharePoint and Teams Graph API writes safely.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Configuration Files & Settings -->
+          <div class="bg-slate-900/40 rounded-2xl border border-slate-800/80 p-6 space-y-4 backdrop-blur-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
+                <div class="flex items-center space-x-2">
+                  <i data-lucide="key" class="w-5 h-5 text-emerald-400"></i>
+                  <h3 class="text-sm font-semibold text-white">Identity Trust Configuration</h3>
+                </div>
+                <span class="text-[10px] bg-slate-950 text-slate-500 border border-slate-800 px-2 py-0.5 rounded font-mono">azure-trust.json</span>
+              </div>
+              <p class="text-xs text-slate-400 leading-relaxed mb-4">This trust parameter registers GCP's identity boundary securely within Azure AD, completely bypassing the threat of stolen secrets.</p>
+            </div>
+
+            <!-- Configuration file JSON representation -->
+            <div class="bg-slate-950 rounded-xl border border-slate-800 p-4 font-mono text-[10.5px] text-slate-300 overflow-x-auto">
+<pre class="leading-relaxed">{
+  <span class="text-indigo-400">"issuer"</span>: <span class="text-emerald-400">"https://accounts.google.com"</span>,
+  <span class="text-indigo-400">"subject"</span>: <span class="text-emerald-400">"https://iam.googleapis.com/projects/salesops-gcp/locations/global/workloadIdentityPools/parent-m365"</span>,
+  <span class="text-indigo-400">"audiences"</span>: [
+    <span class="text-emerald-400">"https://login.microsoftonline.com/parent-tenant-id/v2.0"</span>
+  ],
+  <span class="text-indigo-400">"claims"</span>: {
+    <span class="text-indigo-400">"google_service_account"</span>: <span class="text-emerald-400">"agent-orchestrator@salesops-gcp.iam.gserviceaccount.com"</span>
+  }
+}</pre>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- JavaScript and UI Controller Logic -->
+  <script>
+    // Selected global stack tracking variable
+    let activeGlobalStack = 'google'; // 'google' or 'microsoft'
+
+    // Node Information Directory for Topology Inspector
+    const topoNodeInfo = {
+      hubspot: {
+        cat: "CRM Integration Core",
+        state: "Trigger Pipeline",
+        title: "HubSpot Webhook Dispatcher",
+        desc: "Hooks directly into the central deal pipeline. Triggers external webhooks immediately upon custom events (e.g. stage updates or custom properties modifications).",
+        endpoint: "https://api.hubapi.com/webhooks/v1/{app-id}",
+        security: "OAuth2 / Webhook Signature Header Check"
+      },
+      firestore: {
+        cat: "System Persistence",
+        state: "Isolated Session Store",
+        title: "Cloud Firestore Persistent Database",
+        desc: "Holds persistent metadata safely isolated within scoped collections. Resolves circular update flags and caches past conversational agent execution stages.",
+        endpoint: "/artifacts/{appId}/users/{userId}/sessions",
+        security: "Firebase Client Auth Token (JWT) Security Rules"
+      },
+      'gcp-core': {
+        cat: "Orchestration Cluster",
+        state: "Compute Core",
+        title: "GCP Cloud Run Serverless Pod",
+        desc: "Maintains FastAPI instances running Python LangGraph orchestrations. Maps requests, executes reasoning engines, parses tool intents, and invokes active SDK Adapters.",
+        endpoint: "https://agent-runner-gcp.run.app",
+        security: "GCP IAM Role Binding & Secret Manager Integrations"
+      },
+      google: {
+        cat: "Collaboration Endpoint",
+        state: "Google Workspace Integration",
+        title: "Google Drive & Workspace Driver",
+        desc: "Connects with Drive, Docs, and Slides REST API components. Creates nested client folder structures, duplicates proposals, and replaces context placeholders.",
+        endpoint: "https://www.googleapis.com/drive/v3/files",
+        security: "GCP Workload Identity / Workspace Client Scope Auth"
+      },
+      microsoft: {
+        cat: "Collaboration Endpoint",
+        state: "Microsoft 365 Enterprise",
+        title: "Microsoft Graph Client Driver",
+        desc: "Executes calls directly against OneDrive and SharePoint sites. Dispatches adaptive custom card triggers to MS Teams environments and formats Office document entities.",
+        endpoint: "https://graph.microsoft.com/v1.0",
+        security: "Microsoft Entra ID Federated Client Access Token"
+      }
+    };
+
+    // Tab Interface Toggle Controller
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.add('hidden'));
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('bg-slate-800', 'text-brand-400', 'shadow-inner');
+        btn.classList.add('text-slate-400', 'hover:text-slate-100', 'hover:bg-slate-800/50');
+      });
+
+      const activeBtn = document.getElementById('nav-' + tabId);
+      activeBtn.classList.remove('text-slate-400', 'hover:text-slate-100', 'hover:bg-slate-800/50');
+      activeBtn.classList.add('bg-slate-800', 'text-brand-400', 'shadow-inner');
+    }
+
+    // Dynamic Stack Switcher (Google/M365)
+    function toggleGlobalStack(stack) {
+      activeGlobalStack = stack;
+      
+      const btnGoogle = document.getElementById('global-toggle-google');
+      const btnMicrosoft = document.getElementById('global-toggle-microsoft');
+
+      const pathGoogle = document.getElementById('path-google');
+      const pathMicrosoft = document.getElementById('path-microsoft');
+
+      const nodeGoogle = document.getElementById('node-google');
+      const nodeMicrosoft = document.getElementById('node-microsoft');
+
+      const legendGlowDot = document.getElementById('legend-glow-dot');
+      const legendGlowText = document.getElementById('legend-glow-text');
+
+      // Update Top Toggle UI Buttons
+      if (stack === 'google') {
+        btnGoogle.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center space-x-2 bg-brand-500 text-white shadow-md shadow-brand-500/10";
+        btnMicrosoft.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center space-x-2 text-slate-400 hover:text-slate-200";
+
+        // SVG path animations
+        pathGoogle.setAttribute('stroke', '#4285f4');
+        pathGoogle.setAttribute('stroke-width', '2');
+        pathGoogle.classList.add('glowing-path');
+
+        pathMicrosoft.setAttribute('stroke', '#475569');
+        pathMicrosoft.setAttribute('stroke-width', '1');
+        pathMicrosoft.classList.remove('glowing-path');
+        pathMicrosoft.removeAttribute('stroke-dasharray');
+
+        nodeGoogle.classList.remove('opacity-40');
+        nodeMicrosoft.classList.add('opacity-40');
+
+        legendGlowDot.className = "w-2 h-2 rounded-full bg-google inline-block animate-ping";
+        legendGlowText.innerText = "Google Path Active";
+        legendGlowText.className = "text-slate-200 font-bold";
+
+        // Update Simulator elements
+        document.getElementById('driver-badge-color').className = "w-2.5 h-2.5 rounded-full bg-google";
+        document.getElementById('driver-badge-text').innerText = "Google Drive SDK Driver";
+        updateConsoleMessage("// System parameters loaded: Switched active pipeline output to Google Drive Adapter.");
+      } else {
+        btnMicrosoft.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center space-x-2 bg-brand-500 text-white shadow-md shadow-brand-500/10";
+        btnGoogle.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center space-x-2 text-slate-400 hover:text-slate-200";
+
+        // SVG path animations
+        pathMicrosoft.setAttribute('stroke', '#00a4ef');
+        pathMicrosoft.setAttribute('stroke-width', '2');
+        pathMicrosoft.classList.add('glowing-path');
+
+        pathGoogle.setAttribute('stroke', '#475569');
+        pathGoogle.setAttribute('stroke-width', '1');
+        pathGoogle.classList.remove('glowing-path');
+        pathGoogle.removeAttribute('stroke-dasharray');
+
+        nodeMicrosoft.classList.remove('opacity-40');
+        nodeGoogle.classList.add('opacity-40');
+
+        legendGlowDot.className = "w-2 h-2 rounded-full bg-microsoft inline-block animate-ping";
+        legendGlowText.innerText = "Microsoft Path Active";
+        legendGlowText.className = "text-slate-200 font-bold";
+
+        // Update Simulator elements
+        document.getElementById('driver-badge-color').className = "w-2.5 h-2.5 rounded-full bg-microsoft";
+        document.getElementById('driver-badge-text').innerText = "MS Graph (SharePoint) Driver";
+        updateConsoleMessage("// System parameters loaded: Switched active pipeline output to SharePoint Adapter (M365).");
+      }
+    }
+
+    // Inspect Node Attributes
+    function inspectTopoNode(nodeId) {
+      const data = topoNodeInfo[nodeId];
+      if (!data) return;
+
+      document.getElementById('topo-inspector-default').classList.add('hidden');
+      const details = document.getElementById('topo-inspector-details');
+      details.classList.remove('hidden');
+
+      document.getElementById('topo-cat').innerText = data.cat;
+      document.getElementById('topo-state').innerText = data.state;
+      document.getElementById('topo-title').innerText = data.title;
+      document.getElementById('topo-desc').innerText = data.desc;
+      document.getElementById('topo-endpoint').innerText = data.endpoint;
+      document.getElementById('topo-security').innerText = data.security;
+    }
+
+    // Output raw trace message to simulator viewport
+    function updateConsoleMessage(msg, type = "normal") {
+      const consoleScreen = document.getElementById('live-console-stream');
+      let textColor = "text-slate-400";
+      if (type === "success") textColor = "text-emerald-400";
+      if (type === "warning") textColor = "text-yellow-400";
+      if (type === "info") textColor = "text-cyan-400";
+
+      consoleScreen.innerHTML += `<p class="${textColor}">${msg}</p>`;
+      consoleScreen.scrollTop = consoleScreen.scrollHeight;
+    }
+
+    // Execution Simulator Execution Logic
+    function triggerSimulation(workflow) {
+      const consoleScreen = document.getElementById('live-console-stream');
+      const percentText = document.getElementById('execution-percentage');
+      consoleScreen.innerHTML = ''; // Reset screen
+      
+      let step1 = '';
+      let step2 = '';
+      let step3 = '';
+      let step4 = '';
+
+      if (workflow === 'post-meeting') {
+        updateConsoleMessage("[info] Webhook triggered: Completed Sales Call from Triple Session API.", "info");
+        setTimeout(() => {
+          percentText.innerText = "25%";
+          updateConsoleMessage("[info] Fetching associated HubSpot Deal record details: 'Acme-Upgrade-2026' [dealId: 495827301]");
+        }, 1000);
+
+        setTimeout(() => {
+          percentText.innerText = "50%";
+          updateConsoleMessage("[info] Initializing conversational processing loop. Extracting budget thresholds and objection profiles from transcript text metadata.");
+        }, 2000);
+
+        setTimeout(() => {
+          percentText.innerText = "75%";
+          updateConsoleMessage("[info] Analysis Complete. Objection: 'Manual spreadsheet workflows are bottlenecking deployment speed'. Updating custom CRM HubSpot deals fields.", "warning");
+        }, 3000);
+
+        setTimeout(() => {
+          percentText.innerText = "100%";
+          updateConsoleMessage("[success] HubSpot CRM record updated successfully with structured transcript variables. 3 new followup tasks created. Conversation flow idle.", "success");
+        }, 4000);
+
+      } else if (workflow === 'build-proposal') {
+        updateConsoleMessage("[info] Manual Trigger: HubSpot UI Action Card triggers proposal compiler pipeline.", "info");
+        
+        setTimeout(() => {
+          percentText.innerText = "25%";
+          updateConsoleMessage("[info] Extracting client properties from context cache...");
+        }, 1000);
+
+        setTimeout(() => {
+          percentText.innerText = "50%";
+          // DYNAMIC OUTPUT BASED ON ACTIVE STATE
+          if (activeGlobalStack === 'google') {
+            updateConsoleMessage("[info] Selected Driver: GoogleDriveProvider. Authenticating via Workload Identity Workspace Client...", "info");
+            setTimeout(() => {
+              updateConsoleMessage("[info] Copying template Google Doc file: 'gdoc-sow-enterprise-v2' to buyer destination folder.");
+              updateConsoleMessage("[info] Executing bulk string replacement for placeholders: {{company_name}} -> 'Acme Corp', {{deal_value}} -> '$48,000'.");
+            }, 500);
+          } else {
+            updateConsoleMessage("[info] Selected Driver: SharePointProvider. Directing authentication token fetch against Microsoft Entra ID Endpoint...", "info");
+            setTimeout(() => {
+              updateConsoleMessage("[info] Authenticated. Invoking MS Graph API: GET /sites/parent-sharepoint/drive/root/search(q='sow-template').");
+              updateConsoleMessage("[info] Instantiating blank SOW Word (.docx) inside target SharePoint Directory.");
+              updateConsoleMessage("[info] Saturating OpenXML Word body nodes with custom client variables.");
+            }, 500);
+          }
+        }, 2000);
+
+        setTimeout(() => {
+          percentText.innerText = "75%";
+          updateConsoleMessage("[info] Serializing compiled document state. Writing output link destination back into HubSpot deal record properties...");
+        }, 3000);
+
+        setTimeout(() => {
+          percentText.innerText = "100%";
+          if (activeGlobalStack === 'google') {
+            updateConsoleMessage("[success] Document compiled: https://docs.google.com/document/d/Acme_Enterprise_SOW. Unified interface returned success link back to HubSpot.", "success");
+          } else {
+            updateConsoleMessage("[success] Document compiled: https://sharepoint.com/sales/documents/Acme_Enterprise_SOW.docx. Unified interface returned success link back to HubSpot.", "success");
+          }
+        }, 4000);
+      }
+    }
+
+    // Set Live Timestamps
+    function updateTimestamp() {
+      const date = new Date();
+      document.getElementById('sim-timestamp').innerText = "Live: " + date.toISOString();
+    }
+
+    window.onload = function() {
+      lucide.createIcons();
+      updateTimestamp();
+      setInterval(updateTimestamp, 1000);
+    };
+  </script>
+</body>
+</html>

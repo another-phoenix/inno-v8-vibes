@@ -24,6 +24,7 @@
             google: '#4285f4',
             microsoft: '#00a4ef',
             firebase: '#ffca28',
+            triplesession: '#10b981',
           }
         }
       }
@@ -77,7 +78,7 @@
       <div>
         <h1 class="text-base font-bold text-white tracking-tight flex items-center gap-2">
           Multicloud Agentic Integration Architecture
-          <span class="text-[10px] font-semibold bg-emerald-500/15 text-emerald-400 px-2.5 py-0.5 rounded-full border border-emerald-500/30">Enterprise-Ready Blueprint</span>
+          <span class="text-[10px] font-semibold bg-emerald-500/15 text-emerald-400 px-2.5 py-0.5 rounded-full border border-emerald-500/30">Enterprise-Ready Portfolio</span>
         </h1>
         <p class="text-xs text-slate-400">GCP Core Intelligence Engine interfacing with Google Workspace & Microsoft 365 environments</p>
       </div>
@@ -105,11 +106,19 @@
     <nav class="w-64 bg-slate-900/50 border-r border-slate-800 p-4 flex flex-col justify-between overflow-y-auto flex-none">
       <div class="space-y-6">
         <div>
-          <span class="text-[10px] font-bold tracking-wider text-slate-500 uppercase px-3 block mb-2">Interactive Views</span>
+          <span class="text-[10px] font-bold tracking-wider text-slate-500 uppercase px-3 block mb-2">Architectural views</span>
           <div class="space-y-1">
             <button onclick="switchTab('topology')" id="nav-topology" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition bg-slate-800 text-brand-400 shadow-inner">
               <i data-lucide="git-branch" class="w-4 h-4"></i>
               <span>Multicloud Topology</span>
+            </button>
+            <button onclick="switchTab('agent-flow')" id="nav-agent-flow" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:text-slate-100 hover:bg-slate-800/50">
+              <i data-lucide="users" class="w-4 h-4"></i>
+              <span>Multi-Agent Interaction</span>
+            </button>
+            <button onclick="switchTab('deal-state')" id="nav-deal-state" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:text-slate-100 hover:bg-slate-800/50">
+              <i data-lucide="workflow" class="w-4 h-4"></i>
+              <span>Deal State Machine</span>
             </button>
             <button onclick="switchTab('abstraction')" id="nav-abstraction" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:text-slate-100 hover:bg-slate-800/50">
               <i data-lucide="layers" class="w-4 h-4"></i>
@@ -185,8 +194,11 @@
                 </defs>
 
                 <!-- Core Connections -->
+                <!-- Triple Session to HubSpot Connection -->
+                <path d="M 80,90 L 80,135" stroke="#10b981" stroke-width="2" class="glowing-path opacity-80" />
+
                 <!-- HubSpot to GCP Core -->
-                <path d="M 120,170 Q 240,170 240,170" stroke="#ff7a59" stroke-width="2" class="glowing-path" />
+                <path d="M 140,180 L 240,180" stroke="#ff7a59" stroke-width="2" class="glowing-path" />
                 
                 <!-- Firestore to GCP Core -->
                 <path d="M 320,85 L 320,125" stroke="#ffca28" stroke-width="1.5" class="glowing-path opacity-60" />
@@ -200,14 +212,23 @@
                 <path id="path-microsoft" d="M 400,190 Q 500,250 600,250" stroke="#475569" stroke-width="1" stroke-dasharray="4,4" class="transition-all duration-300" />
 
                 <!-- Nodes -->
+                <!-- Triple Session Ingestion Node (Top Left) -->
+                <g class="cursor-pointer group" onclick="inspectTopoNode('triplesession')">
+                  <rect x="20" y="20" width="120" height="70" rx="10" fill="#022c22" stroke="#10b981" stroke-width="1.5" class="group-hover:fill-emerald-950/40 transition" />
+                  <circle cx="80" cy="45" r="10" fill="none" stroke="#10b981" stroke-width="2" />
+                  <path d="M 76,45 L 84,45 M 80,41 L 80,49" stroke="#10b981" stroke-width="2" />
+                  <text x="80" y="68" fill="#a7f3d0" font-size="10" font-weight="bold" text-anchor="middle">Triple Session</text>
+                  <text x="80" y="79" fill="#10b981" font-size="8" text-anchor="middle">Transcript Ingest</text>
+                </g>
+
                 <!-- HubSpot Node -->
                 <g class="cursor-pointer group" onclick="inspectTopoNode('hubspot')">
-                  <rect x="20" y="125" width="120" height="90" rx="12" fill="#2c140e" stroke="#ff7a59" stroke-width="1.5" class="group-hover:fill-orange-950/40 transition" />
-                  <circle cx="80" cy="155" r="14" fill="none" stroke="#ff7a59" stroke-width="2" />
-                  <circle cx="80" cy="155" r="5" fill="#ff7a59" />
-                  <line x1="80" y1="155" x2="95" y2="145" stroke="#ff7a59" stroke-width="2" />
-                  <text x="80" y="195" fill="#ffd8ce" font-size="10" font-weight="bold" text-anchor="middle">HubSpot CRM</text>
-                  <text x="80" y="206" fill="#ff7a59" font-size="8" text-anchor="middle">State Trigger / UI</text>
+                  <rect x="20" y="135" width="120" height="90" rx="12" fill="#2c140e" stroke="#ff7a59" stroke-width="1.5" class="group-hover:fill-orange-950/40 transition" />
+                  <circle cx="80" cy="165" r="14" fill="none" stroke="#ff7a59" stroke-width="2" />
+                  <circle cx="80" cy="165" r="5" fill="#ff7a59" />
+                  <line x1="80" y1="165" x2="95" y2="155" stroke="#ff7a59" stroke-width="2" />
+                  <text x="80" y="198" fill="#ffd8ce" font-size="10" font-weight="bold" text-anchor="middle">HubSpot CRM</text>
+                  <text x="80" y="209" fill="#ff7a59" font-size="8" text-anchor="middle">State Trigger / UI</text>
                 </g>
 
                 <!-- Cloud Firestore Node (Top Center) -->
@@ -248,14 +269,15 @@
 
             <!-- Footer Legend representing swappable logic -->
             <div class="flex items-center justify-center space-x-6 text-xs border-t border-slate-800/60 pt-4">
-              <span class="flex items-center space-x-1.5"><span class="w-3 h-0.5 bg-hubspot inline-block"></span><span class="text-slate-400">Trigger Pipeline</span></span>
+              <span class="flex items-center space-x-1.5"><span class="w-3 h-0.5 bg-triplesession inline-block"></span><span class="text-slate-400">Triple Session Feed</span></span>
+              <span class="flex items-center space-x-1.5"><span class="w-3 h-0.5 bg-hubspot inline-block"></span><span class="text-slate-400">HubSpot Trigger</span></span>
               <span class="flex items-center space-x-1.5"><span class="w-3 h-0.5 bg-brand-500 inline-block"></span><span class="text-slate-400">GCP Orchestrator</span></span>
               <span class="flex items-center space-x-1.5"><span id="legend-glow-dot" class="w-2 h-2 rounded-full bg-google inline-block animate-ping"></span><span id="legend-glow-text" class="text-slate-200 font-bold">Google Path Active</span></span>
             </div>
           </div>
 
           <!-- Metadata Node Inspector Sidebar -->
-          <div class="w-full xl:w-80 bg-slate-900/60 rounded-2xl border border-slate-800/80 p-5 flex flex-col justify-between backdrop-blur-sm">
+          <div class="w-full xl:w-80 bg-slate-900/60 rounded-2xl border border-slate-800/80 p-5 flex flex-col justify-between backdrop-blur-sm font-sans">
             <div id="topo-inspector-default">
               <h4 class="text-sm font-bold text-white mb-3">Network Node Inspector</h4>
               <p class="text-xs text-slate-400 leading-relaxed mb-4">Click any infrastructure component in the network topology map to inspect internal security models, active API clients, and routing policies.</p>
@@ -305,7 +327,157 @@
         </div>
       </section>
 
-      <!-- ================== VIEW 2: THE ABSTRACTION LAYER ================== -->
+      <!-- ================== VIEW 2: MULTI-AGENT INTERACTION (NEW) ================== -->
+      <section id="tab-agent-flow" class="tab-pane hidden space-y-6">
+        <div class="bg-slate-900/40 rounded-2xl border border-slate-800/80 p-6 backdrop-blur-sm">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-2">
+              <i data-lucide="users" class="w-5 h-5 text-indigo-400"></i>
+              <h3 class="text-sm font-semibold text-white">Multi-Agent State Orchestration (LangGraph Flow)</h3>
+            </div>
+            <span class="text-xs text-slate-500">Click a message bubble to inspect agent responsibilities</span>
+          </div>
+          <p class="text-xs text-slate-400 mb-6">Autonomous systems perform best when segmented into distinct micro-agents. This sequence diagram illustrates the reactive handoffs between our specialized sales agents when a Triple Session call triggers the orchestrator.</p>
+
+          <!-- Sequence Diagram Layout -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center border-b border-slate-800 pb-6 mb-6">
+            <div class="p-4 bg-slate-950 rounded-xl border border-slate-800 flex flex-col items-center">
+              <span class="w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center font-bold text-xs mb-2">T</span>
+              <h4 class="text-xs font-bold text-slate-200">Triple Session</h4>
+              <p class="text-[10px] text-slate-500">Ingestion Webhook</p>
+            </div>
+            <div class="p-4 bg-slate-950 rounded-xl border border-violet-500/30 flex flex-col items-center">
+              <span class="w-8 h-8 rounded-full bg-violet-500/10 text-violet-400 border border-violet-500/20 flex items-center justify-center font-bold text-xs mb-2">L</span>
+              <h4 class="text-xs font-bold text-slate-200">Librarian Agent</h4>
+              <p class="text-[10px] text-slate-500">Context & Memory</p>
+            </div>
+            <div class="p-4 bg-slate-950 rounded-xl border border-amber-500/30 flex flex-col items-center">
+              <span class="w-8 h-8 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center font-bold text-xs mb-2">A</span>
+              <h4 class="text-xs font-bold text-slate-200">Architect Agent</h4>
+              <p class="text-[10px] text-slate-500">Workspace / Docs</p>
+            </div>
+            <div class="p-4 bg-slate-950 rounded-xl border border-cyan-500/30 flex flex-col items-center">
+              <span class="w-8 h-8 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 flex items-center justify-center font-bold text-xs mb-2">C</span>
+              <h4 class="text-xs font-bold text-slate-200">Closer Agent</h4>
+              <p class="text-[10px] text-slate-500">HubSpot Operations</p>
+            </div>
+          </div>
+
+          <!-- Interactive Handoff Steps -->
+          <div class="space-y-4">
+            <div onclick="inspectAgentStep('step-ingest')" class="cursor-pointer bg-slate-950/40 p-4 rounded-xl border border-slate-800 hover:border-brand-500/50 transition flex items-center justify-between">
+              <div class="flex items-center space-x-4">
+                <span class="text-xs font-mono font-bold text-emerald-400">STAGE 1</span>
+                <div>
+                  <h4 class="text-xs font-bold text-white">Triple Session webhook hits FastAPI endpoints</h4>
+                  <p class="text-[10px] text-slate-400">Raw call transcripts containing buyer constraints are parsed & categorized.</p>
+                </div>
+              </div>
+              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
+            </div>
+
+            <div onclick="inspectAgentStep('step-librarian')" class="cursor-pointer bg-slate-950/40 p-4 rounded-xl border border-slate-800 hover:border-brand-500/50 transition flex items-center justify-between">
+              <div class="flex items-center space-x-4">
+                <span class="text-xs font-mono font-bold text-violet-400">STAGE 2</span>
+                <div>
+                  <h4 class="text-xs font-bold text-white">Librarian Agent checks Long-Term Vector DB</h4>
+                  <p class="text-[10px] text-slate-400">Objections are analyzed against company competitive playbooks & past rejections.</p>
+                </div>
+              </div>
+              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
+            </div>
+
+            <div onclick="inspectAgentStep('step-architect')" class="cursor-pointer bg-slate-950/40 p-4 rounded-xl border border-slate-800 hover:border-brand-500/50 transition flex items-center justify-between">
+              <div class="flex items-center space-x-4">
+                <span class="text-xs font-mono font-bold text-amber-400">STAGE 3</span>
+                <div>
+                  <h4 class="text-xs font-bold text-white">Architect Agent drafts custom Scope of Work</h4>
+                  <p class="text-[10px] text-slate-400">Unified adapter loads either Microsoft SharePoint or Google Workspace templates dynamically.</p>
+                </div>
+              </div>
+              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
+            </div>
+
+            <div onclick="inspectAgentStep('step-closer')" class="cursor-pointer bg-slate-950/40 p-4 rounded-xl border border-slate-800 hover:border-brand-500/50 transition flex items-center justify-between">
+              <div class="flex items-center space-x-4">
+                <span class="text-xs font-mono font-bold text-cyan-400">STAGE 4</span>
+                <div>
+                  <h4 class="text-xs font-bold text-white">Closer Agent syncs links & logs metrics back to HubSpot</h4>
+                  <p class="text-[10px] text-slate-400">Custom UI cards are loaded, pipeline state transitions to 'Proposal SOW Drafted', and rep task triggers fire.</p>
+                </div>
+              </div>
+              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
+            </div>
+          </div>
+
+          <!-- Dynamic Agent Details Card -->
+          <div id="agent-inspection-card" class="hidden mt-6 p-4 bg-indigo-950/10 border border-indigo-500/20 rounded-xl">
+            <h4 class="text-xs font-bold uppercase text-indigo-400 tracking-wider mb-1" id="agent-inspect-title">Agent Title</h4>
+            <p class="text-xs text-slate-300" id="agent-inspect-desc">Select a stage above to analyze payload and core responsibilities.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================== VIEW 3: DEAL STATE MACHINE (NEW) ================== -->
+      <section id="tab-deal-state" class="tab-pane hidden space-y-6">
+        <div class="bg-slate-900/40 rounded-2xl border border-slate-800/80 p-6 backdrop-blur-sm">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-2">
+              <i data-lucide="workflow" class="w-5 h-5 text-indigo-400"></i>
+              <h3 class="text-sm font-semibold text-white">HubSpot Deal State Machine Lifecycle</h3>
+            </div>
+            <span class="text-xs text-slate-500">Core Pipeline Transitions</span>
+          </div>
+          <p class="text-xs text-slate-400 mb-6">This interactive machine shows how our autonomous agentic loop updates critical properties and drives the HubSpot Deal record from a basic qualified lead to an active customer, managing security and circular triggers dynamically.</p>
+
+          <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
+            
+            <!-- State 1 -->
+            <div onclick="inspectDealState('stage-lead')" class="cursor-pointer p-4 bg-slate-950 rounded-xl border border-slate-800 hover:border-brand-500/50 transition">
+              <span class="text-[9px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full font-bold">STAGE 1</span>
+              <h4 class="text-xs font-bold text-white mt-2">Discovery Call Ingested</h4>
+              <p class="text-[10px] text-slate-500 mt-1">Triple Session webhook fires raw transcript into HubSpot Deal.</p>
+            </div>
+
+            <!-- State 2 -->
+            <div onclick="inspectDealState('stage-enriched')" class="cursor-pointer p-4 bg-slate-950 rounded-xl border border-slate-800 hover:border-brand-500/50 transition">
+              <span class="text-[9px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full font-bold">STAGE 2</span>
+              <h4 class="text-xs font-bold text-white mt-2">Enriched & Analyzed</h4>
+              <p class="text-[10px] text-slate-500 mt-1">Librarian agent processes the raw transcript, setting key objections.</p>
+            </div>
+
+            <!-- State 3 -->
+            <div onclick="inspectDealState('stage-drafting')" class="cursor-pointer p-4 bg-slate-950 rounded-xl border border-brand-500/50 bg-brand-500/5 transition">
+              <span class="text-[9px] bg-brand-500/20 text-brand-300 px-2 py-0.5 rounded-full font-bold">STAGE 3 (Active)</span>
+              <h4 class="text-xs font-bold text-white mt-2">SOW Generation Triggered</h4>
+              <p class="text-[10px] text-slate-400 mt-1">Architect agent pulls swappable SOW Word/Gdoc template.</p>
+            </div>
+
+            <!-- State 4 -->
+            <div onclick="inspectDealState('stage-verification')" class="cursor-pointer p-4 bg-slate-950 rounded-xl border border-slate-800 hover:border-brand-500/50 transition">
+              <span class="text-[9px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full font-bold">STAGE 4</span>
+              <h4 class="text-xs font-bold text-white mt-2">Human-In-The-Loop Approval</h4>
+              <p class="text-[10px] text-slate-500 mt-1">SOW is published and sent as a HubSpot custom card for review.</p>
+            </div>
+
+            <!-- State 5 -->
+            <div onclick="inspectDealState('stage-closed')" class="cursor-pointer p-4 bg-slate-950 rounded-xl border border-slate-800 hover:border-brand-500/50 transition">
+              <span class="text-[9px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-bold">STAGE 5</span>
+              <h4 class="text-xs font-bold text-white mt-2">Closed Won & Provisioned</h4>
+              <p class="text-[10px] text-slate-500 mt-1">Final deal agreement updated; onboarding folders deployed.</p>
+            </div>
+
+          </div>
+
+          <!-- State Machine Inspector Content Block -->
+          <div id="state-inspection-card" class="mt-6 p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
+            <h4 class="text-xs font-bold text-white" id="state-inspect-title">State Machine Details</h4>
+            <p class="text-xs text-slate-400 leading-relaxed" id="state-inspect-desc">Select a pipeline stage above to reveal state variables, database keys, and trigger conditions written to HubSpot & Firestore.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================== VIEW 4: THE ABSTRACTION LAYER ================== -->
       <section id="tab-abstraction" class="tab-pane hidden space-y-6">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           
@@ -395,7 +567,7 @@
         </div>
       </section>
 
-      <!-- ================== VIEW 3: SIMULATOR ================== -->
+      <!-- ================== VIEW 5: SIMULATOR ================== -->
       <section id="tab-simulator" class="tab-pane hidden space-y-6">
         <div class="flex flex-col lg:flex-row gap-6">
           
@@ -414,7 +586,7 @@
                     <i data-lucide="mic" class="w-4 h-4"></i>
                   </div>
                   <div>
-                    <h4 class="text-xs font-bold text-slate-200">Post-Call Synthesis</h4>
+                    <h4 class="text-xs font-bold text-slate-200">1. Post-Call Synthesis</h4>
                     <p class="text-[10px] text-slate-500">Process Triple Session audio transcript</p>
                   </div>
                 </button>
@@ -424,8 +596,41 @@
                     <i data-lucide="file-text" class="w-4 h-4"></i>
                   </div>
                   <div>
-                    <h4 class="text-xs font-bold text-slate-200">SOW Generation</h4>
-                    <p class="text-[10px] text-slate-500">Draft custom contract from template</p>
+                    <h4 class="text-xs font-bold text-slate-200">2. SOW Generation</h4>
+                    <p class="text-[10px] text-slate-500">Draft custom SOW from template</p>
+                  </div>
+                </button>
+
+                <!-- New Scenario 3 -->
+                <button onclick="triggerSimulation('pre-meeting')" class="w-full bg-slate-950 hover:bg-slate-800/50 text-left p-3 rounded-xl border border-slate-800 transition flex items-start space-x-3">
+                  <div class="p-2 bg-cyan-500/10 text-cyan-400 rounded-lg mt-0.5">
+                    <i data-lucide="search" class="w-4 h-4"></i>
+                  </div>
+                  <div>
+                    <h4 class="text-xs font-bold text-slate-200">3. Pre-Meeting Intel</h4>
+                    <p class="text-[10px] text-slate-500">Scrape profiles via LinkedIn & Google</p>
+                  </div>
+                </button>
+
+                <!-- New Scenario 4 -->
+                <button onclick="triggerSimulation('voice-copilot')" class="w-full bg-slate-950 hover:bg-slate-800/50 text-left p-3 rounded-xl border border-slate-800 transition flex items-start space-x-3">
+                  <div class="p-2 bg-violet-500/10 text-violet-400 rounded-lg mt-0.5">
+                    <i data-lucide="volume-2" class="w-4 h-4"></i>
+                  </div>
+                  <div>
+                    <h4 class="text-xs font-bold text-slate-200">4. Voice Copilot Alert</h4>
+                    <p class="text-[10px] text-slate-500">Real-time live call objection resolution</p>
+                  </div>
+                </button>
+
+                <!-- New Scenario 5 -->
+                <button onclick="triggerSimulation('auto-followup')" class="w-full bg-slate-950 hover:bg-slate-800/50 text-left p-3 rounded-xl border border-slate-800 transition flex items-start space-x-3">
+                  <div class="p-2 bg-amber-500/10 text-amber-400 rounded-lg mt-0.5">
+                    <i data-lucide="mail" class="w-4 h-4"></i>
+                  </div>
+                  <div>
+                    <h4 class="text-xs font-bold text-slate-200">5. Auto-Follow-up Outbox</h4>
+                    <p class="text-[10px] text-slate-500">Automate email & Drive directory setup</p>
                   </div>
                 </button>
               </div>
@@ -457,7 +662,7 @@
             </div>
 
             <!-- Dynamic Stream Logs Area -->
-            <div class="flex-1 bg-slate-950 rounded-xl border border-slate-800 p-4 font-mono text-[11px] text-slate-300 overflow-y-auto space-y-2 h-72" id="live-console-stream">
+            <div class="flex-1 bg-slate-950 rounded-xl border border-slate-800 p-4 font-mono text-[11px] text-slate-300 overflow-y-auto space-y-2 h-[340px]" id="live-console-stream">
               <p class="text-slate-500">// System initialized. Select a workflow trigger on the left to simulate execution.</p>
               <p class="text-slate-500">// Current global provider environment set to: Google Drive Adapter.</p>
             </div>
@@ -472,7 +677,7 @@
         </div>
       </section>
 
-      <!-- ================== VIEW 4: SECURITY & FEDERATED IDENTITY ================== -->
+      <!-- ================== VIEW 6: SECURITY & FEDERATED IDENTITY ================== -->
       <section id="tab-security" class="tab-pane hidden space-y-6">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           
@@ -555,11 +760,19 @@
 
     // Node Information Directory for Topology Inspector
     const topoNodeInfo = {
+      triplesession: {
+        cat: "Transcription Platform",
+        state: "Transcript Stream",
+        title: "Triple Session Integration",
+        desc: "Captures live phone conversations, processes raw audio, and converts files directly into plain-text transcripts. Sends real-time webhook signals with transcription payloads down to HubSpot CRM and the GCP orchestrator.",
+        endpoint: "https://api.triplesession.com/v1/webhooks",
+        security: "HMAC Signed Webhook Secret Header verification"
+      },
       hubspot: {
         cat: "CRM Integration Core",
         state: "Trigger Pipeline",
         title: "HubSpot Webhook Dispatcher",
-        desc: "Hooks directly into the central deal pipeline. Triggers external webhooks immediately upon custom events (e.g. stage updates or custom properties modifications).",
+        desc: "Hooks directly into the central deal pipeline. Triggers external webhooks immediately upon custom events (e.g. stage updates, custom properties modifications, or call ingestion notes).",
         endpoint: "https://api.hubapi.com/webhooks/v1/{app-id}",
         security: "OAuth2 / Webhook Signature Header Check"
       },
@@ -594,6 +807,50 @@
         desc: "Executes calls directly against OneDrive and SharePoint sites. Dispatches adaptive custom card triggers to MS Teams environments and formats Office document entities.",
         endpoint: "https://graph.microsoft.com/v1.0",
         security: "Microsoft Entra ID Federated Client Access Token"
+      }
+    };
+
+    // Agent Steps Multi-Agent Info directory (NEW)
+    const agentStepInfo = {
+      'step-ingest': {
+        title: "Stage 1: Webhook Ingest Layer",
+        desc: "Triple Session issues a POST webhook to GCP with call transcription. The payload includes metadata: call ID, speaker roles, timestamps, and raw transcript blobs. The orchestrator triggers 'The Librarian' to run an immediate BANT extraction process."
+      },
+      'step-librarian': {
+        title: "Stage 2: Objections & Long-Term Recall",
+        desc: "The Librarian Agent executes vector embeddings on key sentences. It checks our Pinecone database to cross-reference previous corporate sales playbooks. It outputs: Objections detected, Competitors mentioned, and Budget constraints found."
+      },
+      'step-architect': {
+        title: "Stage 3: Automated Proposal SOW Generator",
+        desc: "The Architect Agent grabs the structured metadata payload and generates a blank SOW file inside Google Drive or SharePoint depending on the active provider environment. It populates all placeholder variables with no human involvement needed."
+      },
+      'step-closer': {
+        title: "Stage 4: HubSpot Update & Notification Dispatch",
+        desc: "The Closer Agent initiates secure REST updates on HubSpot CRM. It writes the SOW edit link, changes Deal stage properties, pushes tasks, and alerts the sales representative inside HubSpot's sidepanel UI or MS Teams."
+      }
+    };
+
+    // Deal State Machine Pipeline Details Directory (NEW)
+    const dealStateInfo = {
+      'stage-lead': {
+        title: "State 1: Discovery Call Ingested",
+        desc: "Variables changed: `hs_deal_stage = discovery`, `call_transcript_ingested = true`. Firestore initializes a new message thread state record to prevent agent state overlap."
+      },
+      'stage-enriched': {
+        title: "State 2: Context Analysis & Enriched State",
+        desc: "Variables changed: `deal_objections = manual_process`, `budget_limit = 50k00`. Long-term customer profiles are structured by Gemini and cached directly inside isolated user sub-paths in Firestore."
+      },
+      'stage-drafting': {
+        title: "State 3: SOW Draft Complete",
+        desc: "Variables changed: `proposal_sow_link = drive://shares/Acme_SOW_v1`. Decoupled abstract adapters dynamically provisioned the proposal in Word or Docs based on parent company multicloud toggles."
+      },
+      'stage-verification': {
+        title: "State 4: Human-In-The-Loop Approval Ready",
+        desc: "Variables changed: `hs_task_reviewer = sales_rep_id`, `sow_reviewed = false`. State loop pauses and awaits a verified button click from the HubSpot CRM UI card to trigger client dispatch."
+      },
+      'stage-closed': {
+        title: "State 5: Won & Onboarded",
+        desc: "Variables changed: `hs_deal_stage = closedwon`, `onboarding_folder_provisioned = true`. Final contracts are locked, client folders created in SharePoint/Drive, and onboarding teams are automatically notified."
       }
     };
 
@@ -699,6 +956,26 @@
       document.getElementById('topo-security').innerText = data.security;
     }
 
+    // Inspect Agent Step details (NEW)
+    function inspectAgentStep(stepId) {
+      const data = agentStepInfo[stepId];
+      if (!data) return;
+      const card = document.getElementById('agent-inspection-card');
+      card.classList.remove('hidden');
+      document.getElementById('agent-inspect-title').innerText = data.title;
+      document.getElementById('agent-inspect-desc').innerText = data.desc;
+    }
+
+    // Inspect Deal State machine details (NEW)
+    function inspectDealState(stageId) {
+      const data = dealStateInfo[stageId];
+      if (!data) return;
+      const card = document.getElementById('state-inspection-card');
+      card.classList.remove('hidden');
+      document.getElementById('state-inspect-title').innerText = data.title;
+      document.getElementById('state-inspect-desc').innerText = data.desc;
+    }
+
     // Output raw trace message to simulator viewport
     function updateConsoleMessage(msg, type = "normal") {
       const consoleScreen = document.getElementById('live-console-stream');
@@ -711,38 +988,33 @@
       consoleScreen.scrollTop = consoleScreen.scrollHeight;
     }
 
-    // Execution Simulator Execution Logic
+    // Execution Simulator Execution Logic (Expanded with Scenario 3, 4, and 5)
     function triggerSimulation(workflow) {
       const consoleScreen = document.getElementById('live-console-stream');
       const percentText = document.getElementById('execution-percentage');
       consoleScreen.innerHTML = ''; // Reset screen
       
-      let step1 = '';
-      let step2 = '';
-      let step3 = '';
-      let step4 = '';
-
       if (workflow === 'post-meeting') {
         updateConsoleMessage("[info] Webhook triggered: Completed Sales Call from Triple Session API.", "info");
         setTimeout(() => {
           percentText.innerText = "25%";
           updateConsoleMessage("[info] Fetching associated HubSpot Deal record details: 'Acme-Upgrade-2026' [dealId: 495827301]");
-        }, 1000);
+        }, 800);
 
         setTimeout(() => {
           percentText.innerText = "50%";
           updateConsoleMessage("[info] Initializing conversational processing loop. Extracting budget thresholds and objection profiles from transcript text metadata.");
-        }, 2000);
+        }, 1600);
 
         setTimeout(() => {
           percentText.innerText = "75%";
           updateConsoleMessage("[info] Analysis Complete. Objection: 'Manual spreadsheet workflows are bottlenecking deployment speed'. Updating custom CRM HubSpot deals fields.", "warning");
-        }, 3000);
+        }, 2400);
 
         setTimeout(() => {
           percentText.innerText = "100%";
           updateConsoleMessage("[success] HubSpot CRM record updated successfully with structured transcript variables. 3 new followup tasks created. Conversation flow idle.", "success");
-        }, 4000);
+        }, 3200);
 
       } else if (workflow === 'build-proposal') {
         updateConsoleMessage("[info] Manual Trigger: HubSpot UI Action Card triggers proposal compiler pipeline.", "info");
@@ -750,7 +1022,7 @@
         setTimeout(() => {
           percentText.innerText = "25%";
           updateConsoleMessage("[info] Extracting client properties from context cache...");
-        }, 1000);
+        }, 800);
 
         setTimeout(() => {
           percentText.innerText = "50%";
@@ -760,21 +1032,21 @@
             setTimeout(() => {
               updateConsoleMessage("[info] Copying template Google Doc file: 'gdoc-sow-enterprise-v2' to buyer destination folder.");
               updateConsoleMessage("[info] Executing bulk string replacement for placeholders: {{company_name}} -> 'Acme Corp', {{deal_value}} -> '$48,000'.");
-            }, 500);
+            }, 400);
           } else {
             updateConsoleMessage("[info] Selected Driver: SharePointProvider. Directing authentication token fetch against Microsoft Entra ID Endpoint...", "info");
             setTimeout(() => {
               updateConsoleMessage("[info] Authenticated. Invoking MS Graph API: GET /sites/parent-sharepoint/drive/root/search(q='sow-template').");
               updateConsoleMessage("[info] Instantiating blank SOW Word (.docx) inside target SharePoint Directory.");
               updateConsoleMessage("[info] Saturating OpenXML Word body nodes with custom client variables.");
-            }, 500);
+            }, 400);
           }
-        }, 2000);
+        }, 1600);
 
         setTimeout(() => {
           percentText.innerText = "75%";
           updateConsoleMessage("[info] Serializing compiled document state. Writing output link destination back into HubSpot deal record properties...");
-        }, 3000);
+        }, 2400);
 
         setTimeout(() => {
           percentText.innerText = "100%";
@@ -783,7 +1055,87 @@
           } else {
             updateConsoleMessage("[success] Document compiled: https://sharepoint.com/sales/documents/Acme_Enterprise_SOW.docx. Unified interface returned success link back to HubSpot.", "success");
           }
-        }, 4000);
+        }, 3200);
+
+      } else if (workflow === 'pre-meeting') {
+        // NEW SCENARIO 3
+        updateConsoleMessage("[info] Automated Trigger: Google Calendar watch detects 'Acme Corporate Sync' starting in 15 minutes.", "info");
+        setTimeout(() => {
+          percentText.innerText = "25%";
+          updateConsoleMessage("[info] Scraper Agent extracting external participant domains: ['@acme.com'].");
+        }, 800);
+
+        setTimeout(() => {
+          percentText.innerText = "50%";
+          updateConsoleMessage("[info] Spawning scrapers for linkedin.com/in/vp-sales and SerpApi financial press releases...");
+          updateConsoleMessage("[info] Querying LinkedIn Profile: 'Patricia Gailey (Lead Sponsor)'. Identified corporate background at Salesforce & Oracle.");
+        }, 1600);
+
+        setTimeout(() => {
+          percentText.innerText = "75%";
+          updateConsoleMessage("[info] Context analysis compiled by Gemini-2.5-Flash. Writing brief executive profile to HubSpot deal record notes.", "warning");
+        }, 2400);
+
+        setTimeout(() => {
+          percentText.innerText = "100%";
+          updateConsoleMessage("[success] Background intelligence successfully loaded. Added briefing card: 'Pre-Meeting Context - Acme Corporation' to representative sidebar feed.", "success");
+        }, 3200);
+
+      } else if (workflow === 'voice-copilot') {
+        // NEW SCENARIO 4
+        updateConsoleMessage("[info] Real-Time Trigger: Live streaming connection detected via Vapi/Retell websocket layer on active Zoom/Meet session.", "info");
+        setTimeout(() => {
+          percentText.innerText = "30%";
+          updateConsoleMessage("[info] LLM Audio Listener streaming raw bytes to Gemini-2.5-Flash voice core.");
+        }, 800);
+
+        setTimeout(() => {
+          percentText.innerText = "60%";
+          updateConsoleMessage("[info] LIVE DETECTED OBJECTION: 'We're concerned about data isolation on multicloud configurations'.", "warning");
+          updateConsoleMessage("[info] Executing rapid context lookup in Pinecone vector indices for 'Multicloud Security Standards' playbook.");
+        }, 1600);
+
+        setTimeout(() => {
+          percentText.innerText = "90%";
+          updateConsoleMessage("[info] Live recommendation card synthesized: 'Reassure client of Entra ID Workload Identity Federation & separate Firestore paths.'");
+        }, 2400);
+
+        setTimeout(() => {
+          percentText.innerText = "100%";
+          updateConsoleMessage("[success] Real-time visual pop-up alert pushed to sales rep sidebar interface. Rep successfully resolved security concern dynamically.", "success");
+        }, 3200);
+
+      } else if (workflow === 'auto-followup') {
+        // NEW SCENARIO 5
+        updateConsoleMessage("[info] Core Event Trigger: Rep signs off proposal review inside HubSpot deal custom card.", "info");
+        setTimeout(() => {
+          percentText.innerText = "25%";
+          // DYNAMIC ADAPTER CHECK
+          if (activeGlobalStack === 'google') {
+            updateConsoleMessage("[info] Provisioning client SOW Google Shared Folder: 'Acme Onboarding Drive'...");
+          } else {
+            updateConsoleMessage("[info] Provisioning client SOW Microsoft SharePoint Site: 'Acme-Onboarding-SharePoint' via Graph Sites API...");
+          }
+        }, 800);
+
+        setTimeout(() => {
+          percentText.innerText = "50%";
+          if (activeGlobalStack === 'google') {
+            updateConsoleMessage("[info] Directing Gmail Client Adapter. Setting up SMTP template for account executive 'Gavin Horne'.");
+          } else {
+            updateConsoleMessage("[info] Directing MS Graph Outlook Client Adapter. Generating draft outbox payload on behalf of 'Gavin Horne'...");
+          }
+        }, 1600);
+
+        setTimeout(() => {
+          percentText.innerText = "75%";
+          updateConsoleMessage("[info] Context saturated. SOW links included. Writing email log event directly to HubSpot CRM history stream.");
+        }, 2400);
+
+        setTimeout(() => {
+          percentText.innerText = "100%";
+          updateConsoleMessage("[success] Email dispatched. Shared client document workspace created. Pipeline deal status transitioned to: Won.", "success");
+        }, 3200);
       }
     }
 
